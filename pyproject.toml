@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dart_vm_client"
+version = "0.0.1"
+description = "A Python client library to communicate with a Dart VM Service gRPC server for controlling Flutter applications"
+readme = "README.md"
+authors = [
+    {name = "Erick Torres-Moreno"}
+]
+license = {file = "LICENSE"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "grpcio>=1.71.0,<1.72.0",
+    "protobuf>=5.26.1,<6.0dev0",
+    "grpcio-tools>=1.71.0,<1.72.0",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/ericktorres/dart_vm_client"
+"Bug Tracker" = "https://github.com/ericktorres/dart_vm_client/issues"
+
+[tool.setuptools]
+packages = ["dart_vm_client"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+"dart_vm_client.dart_vm_service" = ["**/*"] 

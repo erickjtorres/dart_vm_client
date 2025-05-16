@@ -1,6 +1,6 @@
 import grpc
-import dart_vm_service_pb2
-import dart_vm_service_pb2_grpc
+from . import dart_vm_service_pb2
+from . import dart_vm_service_pb2_grpc
 
 class DartVmServiceClient:
     def __init__(self, server_address="localhost:50051"):

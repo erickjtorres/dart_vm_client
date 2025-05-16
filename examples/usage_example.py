@@ -8,65 +8,15 @@ application and interact with it using various methods provided by the client.
 Usage:
     1. Start a Flutter application with VM service enabled
     2. Run this script with the VM service URI as an argument
-        python example_usage.py ws://127.0.0.1:50505/ws
+        python usage_example.py ws://127.0.0.1:50505/ws
 """
 
 import sys
 import time
 import logging
 
-# Import directly from local files
-import os
-import sys
-
-# Add the current directory to the path so we can import the local files
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from dart_vm_service_client import DartVmServiceClient
-from dart_vm_service_manager import DartVmServiceManager
-
-# Import our wrapper class
-class DartVmClient:
-    """Main client for interacting with the Dart VM Service."""
-    
-    def __init__(self, start_service=True, port=50051, dart_executable=None):
-        """Initialize the client."""
-        self.port = port
-        self.service_manager = None
-        
-        if start_service:
-            self.service_manager = DartVmServiceManager(
-                port=port, 
-                dart_executable=dart_executable
-            )
-            success = self.service_manager.start()
-            if not success:
-                raise RuntimeError("Failed to start Dart VM Service")
-        
-        # Initialize the gRPC client
-        self.client = DartVmServiceClient(f"localhost:{port}")
-    
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-    
-    def close(self):
-        """Close the client and stop the service if it was started by this client."""
-        if hasattr(self, 'client'):
-            self.client.close()
-        
-        if self.service_manager:
-            self.service_manager.stop()
-    
-    # Forward all methods to the gRPC client
-    def __getattr__(self, name):
-        """Forward all attribute access to the client."""
-        if hasattr(self.client, name):
-            return getattr(self.client, name)
-        raise AttributeError(f"'DartVmClient' has no attribute '{name}'")
-
+# Import from the package
+from dart_vm_client import DartVmClient, DartVmServiceClient, DartVmServiceManager
 
 # Set up logging
 logging.basicConfig(
@@ -248,4 +198,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main()) 
