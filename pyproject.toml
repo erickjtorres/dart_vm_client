@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dart_vm_client"
-version = "0.0.1"
+version = "0.0.1.dev2"
 description = "A Python client library to communicate with a Dart VM Service gRPC server for controlling Flutter applications"
 readme = "README.md"
 authors = [
@@ -32,4 +32,7 @@ packages = ["dart_vm_client"]
 include-package-data = true
 
 [tool.setuptools.package-data]
-"dart_vm_client.dart_vm_service" = ["**/*"] 
+"dart_vm_client" = ["**/*"]
+
+[options.data_files]
+"dart_vm_client/dart_vm_service" = ["pubspec.yaml"]

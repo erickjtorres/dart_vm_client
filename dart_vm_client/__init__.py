@@ -4,7 +4,7 @@ from .dart_vm_service_client import DartVmServiceClient
 class DartVmClient:
     """Main client for interacting with the Dart VM Service."""
     
-    def __init__(self, start_service=True, port=50051, dart_executable=None):
+    def __init__(self, start_service=True, port=50051, dart_executable=None, use_global_package=True):
         """
         Initialize the client.
         
@@ -12,6 +12,8 @@ class DartVmClient:
             start_service: Whether to start the bundled Dart VM service
             port: Port for the gRPC service
             dart_executable: Optional path to Dart executable
+            use_global_package: Whether to use the globally installed dart_vm_service package
+                instead of the bundled one (requires: dart pub global activate dart_vm_service)
         """
         self.port = port
         self.service_manager = None
@@ -19,7 +21,8 @@ class DartVmClient:
         if start_service:
             self.service_manager = DartVmServiceManager(
                 port=port, 
-                dart_executable=dart_executable
+                dart_executable=dart_executable,
+                use_global_package=use_global_package
             )
             success = self.service_manager.start()
             if not success:

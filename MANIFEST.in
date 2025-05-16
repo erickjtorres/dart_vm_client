@@ -1,7 +1,8 @@
 include LICENSE
 include README.md
 include requirements.txt
-include dart_vm_service.proto
-include dart_vm_service_pb2.py
-include dart_vm_service_pb2_grpc.py
-recursive-include dart_vm_service * 
+include dart_vm_client/dart_vm_service.proto
+include dart_vm_client/dart_vm_service_pb2.py
+include dart_vm_client/dart_vm_service_pb2_grpc.py
+recursive-include dart_vm_client/dart_vm_service *
+graft dart_vm_client/dart_vm_service 

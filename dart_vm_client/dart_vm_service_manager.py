@@ -8,16 +8,18 @@ import logging
 import socket
 import grpc
 from pathlib import Path
+import shutil
 
 logger = logging.getLogger(__name__)
 
 class DartVmServiceManager:
-    def __init__(self, port=50051, dart_executable=None, service_ready_timeout=10):
+    def __init__(self, port=50051, dart_executable=None, service_ready_timeout=10, use_global_package=True):
         self.port = port
         self.process = None
         self.service_dir = Path(__file__).parent / "dart_vm_service"
         self.dart_executable = dart_executable or self._find_dart_executable()
         self.service_ready_timeout = service_ready_timeout
+        self.use_global_package = use_global_package
         
         # Register cleanup on exit
         atexit.register(self.stop)
@@ -47,6 +49,19 @@ class DartVmServiceManager:
             raise RuntimeError(
                 "Dart executable not found. Please install Dart SDK or provide path to dart executable."
             )
+            
+    def _find_dart_vm_service_command(self):
+        """Find the globally installed dart_vm_service command."""
+        dart_vm_service_cmd = "dart_vm_service"
+        try:
+            # Check if dart_vm_service is in PATH
+            if shutil.which(dart_vm_service_cmd) is not None:
+                return dart_vm_service_cmd
+            # On some systems, it might be installed but not in PATH
+            # Try common locations for dart pub global packages
+            return None
+        except:
+            return None
 
     def start(self):
         """Start the Dart VM Service gRPC server."""
@@ -56,23 +71,47 @@ class DartVmServiceManager:
             
         logger.info("Starting Dart VM Service gRPC server...")
         
-        # Ensure Dart dependencies are installed
-        self._ensure_dart_dependencies()
-        
         # Check if the port is already in use
         if self._is_port_in_use(self.port):
             logger.error(f"Port {self.port} is already in use")
             return False
         
         # Start the service
-        cmd = [
-            self.dart_executable,
-            str(self.service_dir / "bin" / "dart_vm_service.dart"),
-            "--grpc",
-            f"--port={self.port}"
-        ]
+        if self.use_global_package:
+            # Try to use the globally installed dart_vm_service command
+            dart_vm_service_cmd = self._find_dart_vm_service_command()
+            
+            if dart_vm_service_cmd:
+                cmd = [
+                    dart_vm_service_cmd,
+                    "--grpc",
+                    f"--port={self.port}"
+                ]
+            else:
+                # Fall back to using dart pub global run
+                cmd = [
+                    self.dart_executable,
+                    "pub",
+                    "global",
+                    "run",
+                    "dart_vm_service:dart_vm_service",
+                    "--grpc",
+                    f"--port={self.port}"
+                ]
+        else:
+            # Use bundled dart_vm_service
+            # Ensure Dart dependencies are installed for bundled version
+            self._ensure_dart_dependencies()
+            
+            cmd = [
+                self.dart_executable,
+                str(self.service_dir / "bin" / "dart_vm_service.dart"),
+                "--grpc",
+                f"--port={self.port}"
+            ]
         
         try:
+            logger.info(f"Running command: {' '.join(cmd)}")
             self.process = subprocess.Popen(
                 cmd,
                 stdout=subprocess.PIPE,
@@ -98,6 +137,23 @@ class DartVmServiceManager:
             
     def _ensure_dart_dependencies(self):
         """Make sure Dart dependencies are installed."""
+        # If the service directory is missing (e.g. when the package was
+        # installed from a wheel that did not include the Dart sources),
+        # simply skip running `dart pub get`. The gRPC server must then be
+        # provided separately by the user. We log a warning instead of
+        # raising an exception so that the Python client can still be used
+        # to connect to a remote Dart VM Service.
+        if not self.service_dir.exists():
+            logger.warning(
+                "dart_vm_service directory not found at %s. Skipping Dart "
+                "dependency installation. If you intend to start the "
+                "bundled Dart gRPC server, please reinstall the package "
+                "from source (e.g. `pip install -e .`) so the Dart files are "
+                "included.",
+                self.service_dir,
+            )
+            return
+
         logger.info("Ensuring Dart dependencies...")
         try:
             subprocess.run(
