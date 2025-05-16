@@ -1,6 +1,6 @@
 name: dart_vm_service
 description: A CLI tool for interacting with the Dart VM Service API, allowing for debugging and introspection of Dart applications.
-version: 1.0.0
+version: 1.0.1
 repository: https://github.com/erickjtorres/dart_vm_client
 homepage: https://github.com/erickjtorres/dart_vm_client
 issue_tracker: https://github.com/erickjtorres/dart_vm_client/issues
