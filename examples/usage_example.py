@@ -102,7 +102,7 @@ def example_with_manual_management(vm_service_uri, port=50052):
             
             # Get render tree
             logger.info("Dumping render tree...")
-            render_tree = client.dump_render_tree()
+            render_tree = client.get_root_widget_summary_tree_with_previews('flutter_app')
             logger.info(f"Render tree: {render_tree.message[:100]}...")
             
             # Disable features before finishing
@@ -175,12 +175,12 @@ def main():
     if len(sys.argv) > 1:
         vm_service_uri = sys.argv[1]
     else:
-        vm_service_uri = "ws://127.0.0.1:50505/ws"  # Default Flutter debug VM service URI
+        vm_service_uri = "ws://127.0.0.1:64824/vF1gcOo0Ce0=/ws"  # Default Flutter debug VM service URI
         logger.info(f"No VM service URI provided, using default: {vm_service_uri}")
     
     try:
         # Run the examples
-        example_with_context_manager(vm_service_uri)
+        # example_with_context_manager(vm_service_uri)
         time.sleep(1)  # Brief pause between examples
         
         example_with_manual_management(vm_service_uri, port=50052)

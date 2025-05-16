@@ -5,7 +5,6 @@ import time
 import signal
 import atexit
 import logging
-import socket
 import grpc
 from pathlib import Path
 import shutil
@@ -71,10 +70,6 @@ class DartVmServiceManager:
             
         logger.info("Starting Dart VM Service gRPC server...")
         
-        # Check if the port is already in use
-        if self._is_port_in_use(self.port):
-            logger.error(f"Port {self.port} is already in use")
-            return False
         
         # Start the service
         if self.use_global_package:
@@ -125,15 +120,13 @@ class DartVmServiceManager:
                 logger.info(f"Dart VM Service started on port {self.port}")
                 return True
             else:
+                self.stop()  # Make sure to clean up on failure
                 return False
         except Exception as e:
             logger.error(f"Error starting Dart VM Service: {e}")
+            if self.process:
+                self.stop()  # Make sure to clean up on exception
             return False
-
-    def _is_port_in_use(self, port):
-        """Check if the specified port is in use."""
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            return s.connect_ex(('localhost', port)) == 0
             
     def _ensure_dart_dependencies(self):
         """Make sure Dart dependencies are installed."""
@@ -212,6 +205,18 @@ class DartVmServiceManager:
             except Exception as e:
                 logger.error(f"Error stopping Dart VM Service: {e}")
             finally:
+                # Capture any remaining output
+                if self.process:
+                    try:
+                        stdout, stderr = self.process.communicate(timeout=1)
+                        if stderr and stderr.strip():
+                            logger.debug(f"Process stderr: {stderr.strip()}")
+                    except:
+                        pass
                 self.process = None
             
             logger.info("Dart VM Service stopped")
+    
+    def __del__(self):
+        """Ensure resources are cleaned up when object is garbage collected."""
+        self.stop()

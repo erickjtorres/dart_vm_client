@@ -44,6 +44,11 @@ class DartVmClient:
         
         if self.service_manager:
             self.service_manager.stop()
+            self.service_manager = None
+    
+    def __del__(self):
+        """Ensure resources are cleaned up when object is garbage collected."""
+        self.close()
     
     # Forward all methods to the gRPC client
     def __getattr__(self, name):

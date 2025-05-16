@@ -4,7 +4,7 @@ requires-python = ">=3.9"
 
 [[package]]
 name = "dart-vm-client"
-version = "0.0.1.dev2"
+version = "0.0.1.dev4"
 source = { editable = "." }
 dependencies = [
     { name = "grpcio" },
