@@ -73,21 +73,21 @@ Future<void> main(List<String> args) async {
 }
 
 void printUsage(ArgParser parser) {
-  print('Flutter Browser Tool - A tool for controlling Flutter applications');
+  print(
+      'Dart VM Service Tool - A tool for interacting with Dart VM applications');
   print('');
   print('Usage:');
   print('  Direct connection:');
-  print('    dart bin/flutter_browser_tool.dart connect <vm-service-uri>');
+  print('    dart_vm_service connect <vm-service-uri>');
   print('');
   print('  Start gRPC server:');
-  print('    dart bin/flutter_browser_tool.dart --grpc [--port=50051]');
+  print('    dart_vm_service --grpc [--port=50051]');
   print('  or');
-  print('    dart bin/flutter_browser_tool.dart grpc-server [--port=50051]');
+  print('    dart_vm_service grpc-server [--port=50051]');
   print('');
   print('Examples:');
-  print(
-      '  dart bin/flutter_browser_tool.dart connect http://127.0.0.1:50000/abcdef/');
-  print('  dart bin/flutter_browser_tool.dart --grpc --port=8080');
+  print('  dart_vm_service connect http://127.0.0.1:50000/abcdef/');
+  print('  dart_vm_service --grpc --port=8080');
   print('');
   print('Options:');
   print(parser.usage);

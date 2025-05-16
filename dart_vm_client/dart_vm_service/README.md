@@ -1,10 +1,10 @@
 # Dart VM Service
 
-A tool for controlling and testing Flutter applications via VM Service protocol, with gRPC support.
+A CLI tool for interacting with the Dart VM Service API, allowing for debugging and introspection of Dart applications.
 
 ## Features
 
-- Connect to a running Flutter application via VM service
+- Connect to a running Dart/Flutter application via VM service protocol
 - Enable debug painting, performance overlay, and repaint rainbow
 - Interact with widgets (tap, enter text)
 - Get a list of widgets on the current screen
@@ -12,20 +12,35 @@ A tool for controlling and testing Flutter applications via VM Service protocol,
 
 ## Installation
 
+### From Source
+
+Clone this repository and install the package globally:
+
 ```bash
 dart pub get
-brew install protobuf
-dart pub global activate protoc_plugin
+dart pub global activate --source path .
+```
+
+### Dependencies
+
+Make sure you have protobuf installed for gRPC functionality:
+
+```bash
+brew install protobuf  # macOS
+# OR
+apt-get install protobuf  # Ubuntu/Debian
 ```
 
 ## Usage
 
+After installation, you can use the tool directly from the command line:
+
 ### Direct Mode
 
-Connect directly to a Flutter application:
+Connect directly to a Dart/Flutter application:
 
 ```bash
-dart bin/flutter_browser_tool.dart connect http://127.0.0.1:50000/abcdef/
+dart_vm_service connect http://127.0.0.1:50000/abcdef/
 ```
 
 ### gRPC Server Mode
@@ -33,13 +48,13 @@ dart bin/flutter_browser_tool.dart connect http://127.0.0.1:50000/abcdef/
 Start the gRPC server to expose functionality:
 
 ```bash
-dart bin/flutter_browser_tool.dart --grpc --port=50051
+dart_vm_service --grpc --port=50051
 ```
 
 or
 
 ```bash
-dart bin/flutter_browser_tool.dart grpc-server --port=50051
+dart_vm_service grpc-server --port=50051
 ```
 
 ## Development
@@ -56,7 +71,7 @@ This requires the `protoc` compiler to be installed on your system.
 
 ### Dependencies
 
-- `vm_service`: For connecting to the Flutter VM Service
+- `vm_service`: For connecting to the Dart VM Service
 - `grpc`: For gRPC server implementation
 - `protobuf`: For protocol buffer support
 - `args`: For command-line argument parsing
@@ -65,7 +80,7 @@ This requires the `protoc` compiler to be installed on your system.
 
 ### gRPC Service Methods
 
-- `Connect`: Connect to a Flutter application via VM service
+- `Connect`: Connect to a Dart application via VM service
 - `ToggleDebugPaint`: Toggle debug painting on/off
 - `TogglePerformanceOverlay`: Toggle performance overlay on/off
 - `ToggleRepaintRainbow`: Toggle repaint rainbow on/off
