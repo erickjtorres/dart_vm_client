@@ -1,0 +1,11 @@
+# Exclude .dart_tool directory
+.dart_tool/
+
+# Exclude tests
+test/
+
+# Exclude .git
+.git/
+
+# Include lib explicitly
+!lib/ 
