@@ -2,8 +2,7 @@
 
 import 'dart:io';
 
-import 'package:dart_vm_service/dart_vm_service_tool.dart';
-import 'package:dart_vm_service/dart_vm_service_grcp_server.dart';
+import 'package:dart_vm_service/dart_vm_service_grpc_server.dart';
 
 void main() async {
   // Example 1: Connect to a VM service directly

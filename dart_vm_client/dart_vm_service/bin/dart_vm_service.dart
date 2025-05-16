@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:dart_vm_service/dart_vm_service_grcp_server.dart';
+import 'package:dart_vm_service/dart_vm_service_grpc_server.dart';
 import 'package:dart_vm_service/dart_vm_service_tool.dart';
 
 Future<void> main(List<String> args) async {
