@@ -1,0 +1,410 @@
+syntax = "proto3";
+
+package dart_vm_service;
+
+service DartVmService {
+  // Connect to a Flutter app VM service
+  rpc Connect(ConnectRequest) returns (ConnectResponse);
+  
+  // Debug visualization methods
+  rpc ToggleDebugPaint(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleRepaintRainbow(ToggleRequest) returns (ToggleResponse);
+  rpc TogglePerformanceOverlay(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleBaselinePainting(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleDebugBanner(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleStructuredErrors(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleOversizedImages(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleDisablePhysicalShapeLayers(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleDisableOpacityLayers(ToggleRequest) returns (ToggleResponse);
+  
+  // Profiling methods
+  rpc ToggleProfileWidgetBuilds(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleProfileUserWidgetBuilds(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleProfileRenderObjectPaints(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleProfileRenderObjectLayouts(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleProfilePlatformChannels(ToggleRequest) returns (ToggleResponse);
+  
+  // Inspector control methods
+  rpc ToggleInspector(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleTrackRebuildWidgets(ToggleRequest) returns (ToggleResponse);
+  rpc ToggleTrackRepaintWidgets(ToggleRequest) returns (ToggleResponse);
+  
+  // Get current screen widgets and information
+  rpc GetDisplayRefreshRate(ViewIdRequest) returns (DisplayRefreshRateResponse);
+  rpc ListViews(EmptyRequest) returns (ListViewsResponse);
+  
+  // Dump tree methods
+  rpc DumpWidgetTree(EmptyRequest) returns (TreeDumpResponse);
+  rpc DumpLayerTree(EmptyRequest) returns (TreeDumpResponse);
+  rpc DumpRenderTree(EmptyRequest) returns (TreeDumpResponse);
+  rpc DumpSemanticsTreeInTraversalOrder(EmptyRequest) returns (TreeDumpResponse);
+  rpc DumpSemanticsTreeInInverseHitTestOrder(EmptyRequest) returns (TreeDumpResponse);
+  rpc DumpFocusTree(EmptyRequest) returns (TreeDumpResponse);
+  
+  // Frame and timing methods
+  rpc SetTimeDilation(DoubleValueRequest) returns (GenericResponse);
+  rpc DidSendFirstFrameEvent(BoolValueRequest) returns (GenericResponse);
+  rpc DidSendFirstFrameRasterizedEvent(StringValueRequest) returns (GenericResponse);
+  
+  // Asset and application management
+  rpc EvictAssets(StringValueRequest) returns (GenericResponse);
+  rpc Reassemble(EmptyRequest) returns (GenericResponse);
+  rpc ExitApp(EmptyRequest) returns (GenericResponse);
+  
+  // Configuration methods
+  rpc SetVmServiceUri(StringValueRequest) returns (GenericResponse);
+  rpc SetDevToolsServerAddress(StringValueRequest) returns (GenericResponse);
+  rpc SetPlatformOverride(StringValueRequest) returns (GenericResponse);
+  rpc SetBrightnessOverride(StringValueRequest) returns (GenericResponse);
+  
+  // Pub root directory management
+  rpc SetPubRootDirectories(StringListRequest) returns (GenericResponse);
+  rpc AddPubRootDirectories(StringListRequest) returns (GenericResponse);
+  rpc RemovePubRootDirectories(StringListRequest) returns (GenericResponse);
+  rpc GetPubRootDirectories(EmptyRequest) returns (StringListResponse);
+  
+  // Widget interaction methods - Flutter Finder
+  rpc TapWidgetByKey(StringValueRequest) returns (GenericResponse);
+  rpc TapWidgetByText(StringValueRequest) returns (GenericResponse);
+  rpc TapWidgetByType(StringValueRequest) returns (GenericResponse);
+  rpc TapWidgetByTooltip(StringValueRequest) returns (GenericResponse);
+  rpc TapWidgetByAncestorAndDescendant(AncestorDescendantRequest) returns (GenericResponse);
+  rpc EnterText(EnterTextRequest) returns (GenericResponse);
+  rpc EnterTextByKey(EnterTextKeyRequest) returns (GenericResponse);
+  rpc EnterTextByType(EnterTextTypeRequest) returns (GenericResponse);
+  rpc EnterTextByText(EnterTextTextRequest) returns (GenericResponse);
+  rpc EnterTextByTooltip(EnterTextTooltipRequest) returns (GenericResponse);
+  rpc EnterTextByAncestorAndDescendant(EnterTextAncestorDescendantRequest) returns (GenericResponse);
+  rpc ScrollDownByKey(StringValueRequest) returns (GenericResponse);
+  rpc ScrollDownByType(StringValueRequest) returns (GenericResponse);
+  rpc ScrollDownByText(StringValueRequest) returns (GenericResponse);
+  rpc ScrollDownByTooltip(StringValueRequest) returns (GenericResponse);
+  rpc ScrollDownByAncestorAndDescendant(AncestorDescendantRequest) returns (GenericResponse);
+  rpc ScrollUpByKey(StringValueRequest) returns (GenericResponse);
+  rpc ScrollUpByType(StringValueRequest) returns (GenericResponse);
+  rpc ScrollUpByText(StringValueRequest) returns (GenericResponse);
+  rpc ScrollUpByTooltip(StringValueRequest) returns (GenericResponse);
+  rpc ScrollUpByAncestorAndDescendant(AncestorDescendantRequest) returns (GenericResponse);
+  rpc ScrollDownByKeyExtended(ScrollKeyRequest) returns (GenericResponse);
+  rpc ScrollDownByTypeExtended(ScrollTypeRequest) returns (GenericResponse);
+  rpc ScrollDownByTextExtended(ScrollTextRequest) returns (GenericResponse);
+  rpc ScrollDownByTooltipExtended(ScrollTooltipRequest) returns (GenericResponse);
+  rpc ScrollDownByAncestorAndDescendantExtended(ScrollAncestorDescendantRequest) returns (GenericResponse);
+  rpc ScrollUpByKeyExtended(ScrollKeyRequest) returns (GenericResponse);
+  rpc ScrollUpByTypeExtended(ScrollTypeRequest) returns (GenericResponse);
+  rpc ScrollUpByTextExtended(ScrollTextRequest) returns (GenericResponse);
+  rpc ScrollUpByTooltipExtended(ScrollTooltipRequest) returns (GenericResponse);
+  rpc ScrollUpByAncestorAndDescendantExtended(ScrollAncestorDescendantRequest) returns (GenericResponse);
+  rpc ScrollIntoViewByKey(ScrollIntoViewKeyRequest) returns (GenericResponse);
+  rpc ScrollIntoViewByType(ScrollIntoViewTypeRequest) returns (GenericResponse);
+  rpc ScrollIntoViewByText(ScrollIntoViewTextRequest) returns (GenericResponse);
+  rpc ScrollIntoViewByTooltip(ScrollIntoViewTooltipRequest) returns (GenericResponse);
+  rpc ScrollIntoViewByAncestorAndDescendant(ScrollIntoViewAncestorDescendantRequest) returns (GenericResponse);
+  
+  // Widget tree inspection methods
+  rpc IsWidgetTreeReady(EmptyRequest) returns (GenericResponse);
+  rpc IsWidgetCreationTracked(EmptyRequest) returns (GenericResponse);
+  rpc GetRootWidget(ObjectGroupRequest) returns (GenericResponse);
+  rpc GetRootWidgetSummaryTree(ObjectGroupRequest) returns (GenericResponse);
+  rpc GetRootWidgetSummaryTreeWithPreviews(ObjectGroupRequest) returns (GenericResponse);
+  rpc GetSelectedWidget(SelectedWidgetRequest) returns (GenericResponse);
+  rpc GetSelectedSummaryWidget(SelectedWidgetRequest) returns (GenericResponse);
+  rpc SetSelectionById(SelectionByIdRequest) returns (GenericResponse);
+  
+  // Object management methods
+  rpc DisposeAllGroups(ObjectGroupRequest) returns (GenericResponse);
+  rpc DisposeGroup(ObjectGroupRequest) returns (GenericResponse);
+  rpc DisposeId(DisposeIdRequest) returns (GenericResponse);
+  
+  // Widget details methods
+  rpc GetParentChain(WidgetRequest) returns (GenericResponse);
+  rpc GetProperties(WidgetRequest) returns (GenericResponse);
+  rpc GetChildren(WidgetRequest) returns (GenericResponse);
+  rpc GetChildrenSummaryTree(WidgetRequest) returns (GenericResponse);
+  rpc GetChildrenDetailsSubtree(WidgetRequest) returns (GenericResponse);
+  rpc GetDetailsSubtree(DetailSubtreeRequest) returns (GenericResponse);
+  
+  // Screenshot and layout methods
+  rpc Screenshot(ScreenshotRequest) returns (GenericResponse);
+  rpc GetLayoutExplorerNode(LayoutExplorerRequest) returns (GenericResponse);
+  rpc SetFlexFit(FlexFitRequest) returns (GenericResponse);
+  rpc SetFlexFactor(FlexFactorRequest) returns (GenericResponse);
+  rpc SetFlexProperties(FlexPropertiesRequest) returns (GenericResponse);
+}
+
+// Request to connect to a Flutter app
+message ConnectRequest {
+  string vm_service_uri = 1;
+}
+
+// Response from connect request
+message ConnectResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Empty request for methods that don't need parameters
+message EmptyRequest {}
+
+// Toggle request for features that can be enabled/disabled
+message ToggleRequest {
+  bool enable = 1;
+}
+
+// Toggle response
+message ToggleResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Request with a view ID
+message ViewIdRequest {
+  string view_id = 1;
+}
+
+// Response with display refresh rate
+message DisplayRefreshRateResponse {
+  bool success = 1;
+  string message = 2;
+  double refresh_rate = 3;
+}
+
+// Response with views
+message ListViewsResponse {
+  bool success = 1;
+  string message = 2;
+  repeated string views = 3;
+}
+
+// Request with a double value
+message DoubleValueRequest {
+  double value = 1;
+}
+
+// Request with a boolean value
+message BoolValueRequest {
+  bool value = 1;
+}
+
+// Request with a string value
+message StringValueRequest {
+  string value = 1;
+}
+
+// Generic response message
+message GenericResponse {
+  bool success = 1;
+  string message = 2;
+  string data = 3;
+}
+
+// Request with a list of strings
+message StringListRequest {
+  repeated string values = 1;
+}
+
+// Response with a list of strings
+message StringListResponse {
+  bool success = 1;
+  string message = 2;
+  repeated string values = 3;
+}
+
+// Request for entering text
+message EnterTextRequest {
+  string key_value = 1;
+  string text = 2;
+}
+
+// Request for ancestor/descendant widget tapping
+message AncestorDescendantRequest {
+  string ancestor_type = 1;
+  string descendant_type = 2;
+}
+
+// Tree dump response
+message TreeDumpResponse {
+  bool success = 1;
+  string message = 2;
+  string tree_dump = 3;
+}
+
+// Request with object group
+message ObjectGroupRequest {
+  string object_group = 1;
+}
+
+// Request for selected widget
+message SelectedWidgetRequest {
+  string object_group = 1;
+  string previous_selection_id = 2;
+}
+
+// Request for selection by ID
+message SelectionByIdRequest {
+  string object_group = 1;
+  string object_id = 2;
+}
+
+// Request for disposing an object ID
+message DisposeIdRequest {
+  string object_group = 1;
+  string object_id = 2;
+}
+
+// Request for widget operations
+message WidgetRequest {
+  string object_group = 1;
+  string widget_id = 2;
+}
+
+// Request for detailed subtree
+message DetailSubtreeRequest {
+  string object_group = 1;
+  string widget_id = 2;
+  int32 subtree_depth = 3;
+}
+
+// Request for screenshot
+message ScreenshotRequest {
+  string widget_id = 1;
+  double width = 2;
+  double height = 3;
+  double margin = 4;
+  double max_pixel_ratio = 5;
+  bool debug_paint = 6;
+}
+
+// Request for layout explorer
+message LayoutExplorerRequest {
+  string object_group = 1;
+  string widget_id = 2;
+  int32 subtree_depth = 3;
+}
+
+// Request for flex fit
+message FlexFitRequest {
+  string widget_id = 1;
+  string flex_fit = 2;
+}
+
+// Request for flex factor
+message FlexFactorRequest {
+  string widget_id = 1;
+  int32 flex_factor = 2;
+}
+
+// Request for flex properties
+message FlexPropertiesRequest {
+  string widget_id = 1;
+  string main_axis_alignment = 2;
+  string cross_axis_alignment = 3;
+}
+
+// Request for entering text by key
+message EnterTextKeyRequest {
+  string key_value = 1;
+  string text = 2;
+}
+
+// Request for entering text by type
+message EnterTextTypeRequest {
+  string widget_type = 1;
+  string text = 2;
+}
+
+// Request for entering text by text
+message EnterTextTextRequest {
+  string widget_text = 1;
+  string text = 2;
+}
+
+// Request for entering text by tooltip
+message EnterTextTooltipRequest {
+  string tooltip = 1;
+  string text = 2;
+}
+
+// Request for entering text by ancestor and descendant
+message EnterTextAncestorDescendantRequest {
+  string ancestor_type = 1;
+  string descendant_type = 2;
+  string text = 3;
+}
+
+// Request for scroll key
+message ScrollKeyRequest {
+  string key_value = 1;
+  double dx = 2;
+  double dy = 3;
+  int64 duration_microseconds = 4;
+  int32 frequency = 5;
+}
+
+// Request for scroll type
+message ScrollTypeRequest {
+  string widget_type = 1;
+  double dx = 2;
+  double dy = 3;
+  int64 duration_microseconds = 4;
+  int32 frequency = 5;
+}
+
+// Request for scroll text
+message ScrollTextRequest {
+  string text = 1;
+  double dx = 2;
+  double dy = 3;
+  int64 duration_microseconds = 4;
+  int32 frequency = 5;
+}
+
+// Request for scroll tooltip
+message ScrollTooltipRequest {
+  string tooltip = 1;
+  double dx = 2;
+  double dy = 3;
+  int64 duration_microseconds = 4;
+  int32 frequency = 5;
+}
+
+// Request for scroll ancestor and descendant
+message ScrollAncestorDescendantRequest {
+  string ancestor_type = 1;
+  string descendant_type = 2;
+  double dx = 3;
+  double dy = 4;
+  int64 duration_microseconds = 5;
+  int32 frequency = 6;
+}
+
+// Request for scroll into view by key
+message ScrollIntoViewKeyRequest {
+  string key_value = 1;
+  double alignment = 2;
+}
+
+// Request for scroll into view by type
+message ScrollIntoViewTypeRequest {
+  string widget_type = 1;
+  double alignment = 2;
+}
+
+// Request for scroll into view by text
+message ScrollIntoViewTextRequest {
+  string text = 1;
+  double alignment = 2;
+}
+
+// Request for scroll into view by tooltip
+message ScrollIntoViewTooltipRequest {
+  string tooltip = 1;
+  double alignment = 2;
+}
+
+// Request for scroll into view by ancestor and descendant
+message ScrollIntoViewAncestorDescendantRequest {
+  string ancestor_type = 1;
+  string descendant_type = 2;
+  double alignment = 3;
+}
